@@ -1,3 +1,8 @@
+Boiling Pot branch
+==================
+It was kind of meant to be a melting pot, but whatever.
+This is the testing branch I use where I merge all the branches before putting them on main SMH github.
+
 Stop Motion Helper
 ==================
 Stop Motion Helper is a tool for Garry's Mod designed to make stop motion animation easier and more manageable.
