@@ -20,7 +20,7 @@ SMH.MessageTypes = {
     "StopPlayback",
     "PlaybackResponse",
 
-	"SetRendering",
+	"IsRendering",
     "UpdateGhostState",
     "UpdateGhostStateResponse",
 
@@ -28,19 +28,12 @@ SMH.MessageTypes = {
     "GetServerSavesResponse",
     "GetModelList",
     "GetModelListResponse",
-	"GetModelInfo",
-	"GetModelInfoResponse",
-	"GetServerEntities",
-	"GetServerEntitiesResponse",
     "Load",
     "LoadResponse",
     "Save",
     "SaveResponse",
     "DeleteSave",
     "DeleteSaveResponse",
-	
-	"ApplyEntityName",
-	"ApplyEntityNameResponse",
 }
 for key, val in pairs(SMH.MessageTypes) do
     local prefixVal = "SMH" .. val

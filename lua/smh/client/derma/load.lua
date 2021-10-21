@@ -21,11 +21,6 @@ function PANEL:Init()
 	self.EntityList = vgui.Create("DListView", self)
 	self.EntityList:AddColumn("Entities")
 	self.EntityList:SetMultiSelect(false)
-	self.EntityList.OnRowSelected = function(_, rowIndex, row)
-		local _, selectedSave = self.FileList:GetSelectedLine()
-		if !IsValid(selectedSave) then return end
-		self:OnModelInfoRequested(selectedSave:GetValue(1),row:GetValue(1), false)
-	end
 
 	self.Load = vgui.Create("DButton", self)
 	self.Load:SetText("Load")
@@ -34,10 +29,10 @@ function PANEL:Init()
 	end
 	
 	self.SaveEntity = vgui.Create("DLabel", self)
-	self.SaveEntity:SetText("Save's model: " .. "nil")
+	self.SaveEntity:SetText("Save's model: " .. "Placeholder")
 	
 	self.SaveMap = vgui.Create("DLabel", self)
-	self.SaveMap:SetText("Save's map: " .. "nil")
+	self.SaveMap:SetText("Save's map: " .. "Placeholder")
 	
 	self.SelectedEnt = vgui.Create("DLabel", self)
 	self.SelectedEnt:SetText("Selected model: " .. "nil")
@@ -77,13 +72,8 @@ function PANEL:SetSaves(saves)
 	self.FileList:UpdateLines(saves)
 end
 
-function PANEL:SetEntities(entities, map)
+function PANEL:SetEntities(entities)
 	self.EntityList:UpdateLines(entities)
-	self.SaveMap:SetText("Selected map: " .. map)
-end
-
-function PANEL:SetModelName(name)
-	self.SaveEntity:SetText("Save's model: " .. name)
 end
 
 function PANEL:LoadSelected()
@@ -102,6 +92,5 @@ end
 
 function PANEL:OnModelListRequested(path, loadFromClient) end
 function PANEL:OnLoadRequested(path, modelName, loadFromClient) end
-function PANEL:OnModelInfoRequested(path, modelname, loadFromClient) end
 
 vgui.Register("SMHLoad", PANEL, "DFrame")

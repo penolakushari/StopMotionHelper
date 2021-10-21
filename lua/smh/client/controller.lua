@@ -76,11 +76,6 @@ function CTRL.GetModelList(path, loadFromClient)
     end
 end
 
-function CTRL.GetServerEntities()
-	net.Start(SMH.MessageTypes.GetServerEntities)
-	net.SendToServer()
-end
-
 function CTRL.Load(path, modelName, loadFromClient)
     if not IsValid(SMH.State.Entity) then
         return
@@ -100,13 +95,6 @@ function CTRL.Load(path, modelName, loadFromClient)
     end
 
     net.SendToServer()
-end
-
-function CTRL.GetModelInfo(path, modelName, loadFromClient)
-	net.Start(SMH.MessageTypes.GetModelInfo)
-	net.WriteString(path)
-	net.WriteString(modelName)
-	net.SendToServer()
 end
 
 function CTRL.Save(path, saveToClient)
@@ -180,8 +168,8 @@ function CTRL.OpenHelp()
     gui.OpenURL("https://github.com/Winded/StopMotionHelper/blob/master/TUTORIAL.md")
 end
 
-function CTRL.SetRendering(rendering)
-	net.Start(SMH.MessageTypes.SetRendering)
+function CTRL.IsRendering(rendering)
+	net.Start(SMH.MessageTypes.IsRendering)
     net.WriteBool(rendering)
     net.SendToServer()
 end
@@ -189,13 +177,6 @@ end
 function CTRL.UpdateGhostState()
 	net.Start(SMH.MessageTypes.UpdateGhostState)
 	net.WriteTable(SMH.Settings.GetAll())
-	net.SendToServer()
-end
-
-function CTRL.ApplyEntityName(ent, name)
-	net.Start(SMH.MessageTypes.ApplyEntityName)
-	net.WriteEntity(ent)
-	net.WriteString(name)
 	net.SendToServer()
 end
 
@@ -238,13 +219,7 @@ end
 
 local function GetModelListResponse(msgLength)
     local models = net.ReadTable()
-	local map = net.ReadString()
-    SMH.UI.SetModelList(models, map)
-end
-
-local function GetServerEntitiesResponse(msgLength)
-	local entities = net.ReadTable()
-	SMH.UI.SetEntityList(entities)
+    SMH.UI.SetModelList(models)
 end
 
 local function LoadResponse(msgLength)
@@ -254,11 +229,6 @@ local function LoadResponse(msgLength)
     if entity == SMH.State.Entity then
         SMH.UI.SetKeyframes(keyframes)
     end
-end
-
-local function GetModelInfoResponse(msgLength)
-	local name = net.ReadString()
-	SMH.UI.SetModelName(name)
 end
 
 local function SaveResponse(msgLength)
@@ -280,12 +250,6 @@ local function DeleteSaveResponse(msgLength)
     SMH.UI.RemoveSaveFile(path)
 end
 
-local function ApplyEntityNameResponse(msgLength)
-	local name = net.ReadString()
-	
-	SMH.UI.UpdateName(name)
-end
-
 local function Setup()
     net.Receive(SMH.MessageTypes.SetFrameResponse, SetFrameResponse)
 
@@ -296,13 +260,9 @@ local function Setup()
 
     net.Receive(SMH.MessageTypes.GetServerSavesResponse, GetServerSavesResponse)
     net.Receive(SMH.MessageTypes.GetModelListResponse, GetModelListResponse)
-	net.Receive(SMH.MessageTypes.GetServerEntitiesResponse, GetServerEntitiesResponse)
     net.Receive(SMH.MessageTypes.LoadResponse, LoadResponse)
-	net.Receive(SMH.MessageTypes.GetModelInfoResponse, GetModelInfoResponse)
     net.Receive(SMH.MessageTypes.SaveResponse, SaveResponse)
     net.Receive(SMH.MessageTypes.DeleteSaveResponse, DeleteSaveResponse)
-	
-	net.Receive(SMH.MessageTypes.ApplyEntityNameResponse, ApplyEntityNameResponse)
 end
 
 Setup()
